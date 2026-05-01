@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDIT Aya Sophia — Sistem Manajemen Aset</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="school-emblem">
+      <div class="emblem-icon">🕌</div>
+      <div>
+        <div class="school-name">SDIT Aya Sophia</div>
+        <div class="school-tagline">Islamic School</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.2);margin-top:6px;">Sistem Manajemen Aset</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-group">
+      <div class="nav-group-label">Utama</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('aset')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h10M3 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Daftar Aset
+        <span class="nbadge" id="sideAssetCount">247</span>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Transaksi</div>
+      <div class="nav-item" onclick="showPage('peminjaman')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Peminjaman
+        <span class="nbadge nbadge-red" id="sideBorrowCount">8</span>
+      </div>
+
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Analitik</div>
+      <div class="nav-item" onclick="showPage('laporan')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 12V8M6 12V5M9 12V7M12 12V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Laporan
+      </div>
+      <div class="nav-item" onclick="showPage('kategori')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="5" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/><circle cx="11" cy="11" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M5 8v5M11 3v5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Kategori & Lokasi
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Sistem</div>
+      <div class="nav-item" onclick="showPage('pengaturan')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.4"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Pengaturan
+      </div>
+      <div class="nav-item" onclick="showPage('profil')">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Profil Saya
+      </div>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">A</div>
+      <div>
+        <div class="user-name">Ahmad Fauzi, S.Pd.</div>
+        <div class="user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="breadcrumb" id="pageBreadcrumb">SDIT Aya Sophia → Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn notif-dot" onclick="showToast('3 notifikasi baru','warning')" title="Notifikasi">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2a5 5 0 00-5 5v2l-1 2h12l-1-2V7a5 5 0 00-5-5z" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 13a1.5 1.5 0 003 0" stroke="currentColor" stroke-width="1.4"/></svg>
+      </div>
+      <button class="btn btn-gold" onclick="openModal('modal-tambah-aset')">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Tambah Aset
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="page active" id="page-dashboard">
+      <div class="alert-banner">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L1 13h14L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <strong>Perhatian:</strong>&nbsp;5 aset memerlukan perawatan segera & 3 peminjaman akan jatuh tempo hari ini.
+        <span style="margin-left:auto;cursor:pointer;font-size:16px;" onclick="this.parentElement.remove()">×</span>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card blue">
+          <div class="metric-label">Total Aset</div>
+          <div class="metric-value">247</div>
+          <div><span class="metric-tag tag-blue">+12 bulan ini</span></div>
+        </div>
+        <div class="metric-card green">
+          <div class="metric-label">Kondisi Baik</div>
+          <div class="metric-value">198</div>
+          <div><span class="metric-tag tag-green">80.2% dari total</span></div>
+        </div>
+        <div class="metric-card amber">
+          <div class="metric-label">Sedang Dipinjam</div>
+          <div class="metric-value">34</div>
+          <div><span class="metric-tag tag-amber">8 segera kembali</span></div>
+        </div>
+        <div class="metric-card red">
+          <div class="metric-label">Perlu Perhatian</div>
+          <div class="metric-value">15</div>
+          <div><span class="metric-tag tag-red">Perawatan & Rusak</span></div>
+        </div>
+      </div>
+
+      <div class="dash-row">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Distribusi Aset per Kategori</span>
+              <span class="card-action" onclick="showPage('laporan')">Lihat laporan lengkap →</span>
+            </div>
+            <div style="padding:16px 18px;">
+              <div class="chart-bars" id="dashChart"></div>
+              <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);"><span style="width:8px;height:8px;border-radius:2px;background:#1A4F8A;display:inline-block;"></span>Jumlah</div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);"><span style="width:8px;height:8px;border-radius:2px;background:#2E9462;display:inline-block;"></span>Kondisi Baik</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Aset Perlu Perhatian</span>
+              <span class="card-action" onclick="showPage('aset')">Lihat semua →</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr>
+                  <th>Nama Aset</th><th>Kategori</th><th>Lokasi</th><th>Kondisi</th><th>PIC</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td><span class="font-bold">Laptop Lenovo IdeaPad</span><div class="asset-code">AST-0211</div></td><td><span class="metric-tag tag-blue">Elektronik</span></td><td>Lab Komputer</td><td><span class="status-pill pill-warn"><span class="pill-dot"></span>Perawatan</span></td><td class="text-sm">Pak Dani</td></tr>
+                  <tr><td><span class="font-bold">Bola Basket Wilson (set)</span><div class="asset-code">AST-0155</div></td><td><span class="metric-tag tag-gold">Olahraga</span></td><td>Lapangan</td><td><span class="status-pill pill-bad"><span class="pill-dot"></span>Rusak</span></td><td class="text-sm">—</td></tr>
+                  <tr><td><span class="font-bold">Proyektor Epson EB-X51</span><div class="asset-code">AST-0234</div></td><td><span class="metric-tag tag-blue">Elektronik</span></td><td>Ruang Kelas 3A</td><td><span class="status-pill pill-warn"><span class="pill-dot"></span>Perawatan</span></td><td class="text-sm">Bu Sari</td></tr>
+                  <tr><td><span class="font-bold">Kursi Siswa (30 unit)</span><div class="asset-code">AST-0101</div></td><td><span class="metric-tag tag-green">Furnitur</span></td><td>Ruang Kelas</td><td><span class="status-pill pill-warn"><span class="pill-dot"></span>Perawatan</span></td><td class="text-sm">—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Aktivitas Terbaru</span></div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="act-icon" style="background:var(--green-bg);">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#1F6B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="act-body"><div class="act-title">Proyektor dikembalikan</div><div class="act-sub">Kelas 3B · Pak Ahmad</div></div>
+                <div class="act-time">2j lalu</div>
+              </div>
+              <div class="activity-item">
+                <div class="act-icon" style="background:var(--amber-bg);">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#8B5E00" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="#8B5E00" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+                <div class="act-body"><div class="act-title">Peminjaman laptop</div><div class="act-sub">Lab TIK · Bu Sari</div></div>
+                <div class="act-time">4j lalu</div>
+              </div>
+              <div class="activity-item">
+                <div class="act-icon" style="background:var(--red-bg);">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11.5v.5" stroke="#8B1A1A" stroke-width="1.8" stroke-linecap="round"/><path d="M8 2L2 13h12L8 2z" stroke="#8B1A1A" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="act-body"><div class="act-title">Aset dilaporkan rusak</div><div class="act-sub">Bola basket #3</div></div>
+                <div class="act-time">1h lalu</div>
+              </div>
+              <div class="activity-item">
+                <div class="act-icon" style="background:var(--blue-bg);">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#1A4F8A" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div class="act-body"><div class="act-title">Aset baru ditambahkan</div><div class="act-sub">Kursi siswa × 30</div></div>
+                <div class="act-time">Kemarin</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Kondisi per Kategori</span></div>
+            <div style="padding:14px 18px;">
+              <div class="progress-item"><div class="progress-row"><span>Elektronik</span><span style="font-weight:600;">82%</span></div><div class="progress-bar"><div class="progress-fill" style="width:82%;background:#1A4F8A;"></div></div></div>
+              <div class="progress-item"><div class="progress-row"><span>Furnitur</span><span style="font-weight:600;">91%</span></div><div class="progress-bar"><div class="progress-fill" style="width:91%;background:#2E9462;"></div></div></div>
+              <div class="progress-item"><div class="progress-row"><span>Laboratorium</span><span style="font-weight:600;">74%</span></div><div class="progress-bar"><div class="progress-fill" style="width:74%;background:#4A3580;"></div></div></div>
+              <div class="progress-item"><div class="progress-row"><span>Olahraga</span><span style="font-weight:600;">58%</span></div><div class="progress-bar"><div class="progress-fill" style="width:58%;background:#C4932A;"></div></div></div>
+              <div class="progress-item"><div class="progress-row"><span>Kendaraan</span><span style="font-weight:600;">67%</span></div><div class="progress-bar"><div class="progress-fill" style="width:67%;background:#8B5E00;"></div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Nilai Total Aset</span></div>
+            <div class="quick-stats">
+              <div class="qs-item"><div class="qs-val">2.4M</div><div class="qs-label">Nilai (Rp juta)</div></div>
+              <div class="qs-item"><div class="qs-val">247</div><div class="qs-label">Total Unit</div></div>
+              <div class="qs-item"><div class="qs-val">12</div><div class="qs-label">Baru Bulan Ini</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-aset">
+      <div class="filter-bar">
+        <div class="filter-row">
+          <div class="search-input">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" id="asetSearch" placeholder="Cari nama, kode, atau lokasi aset..." oninput="filterAset()">
+          </div>
+          <select class="sel" id="asetKat" onchange="filterAset()">
+            <option value="">Semua Kategori</option>
+            <option>Elektronik</option><option>Furnitur</option><option>Kendaraan</option><option>Olahraga</option><option>Laboratorium</option><option>Alat Tulis</option>
+          </select>
+          <select class="sel" id="asetKond" onchange="filterAset()">
+            <option value="">Semua Kondisi</option>
+            <option>Baik</option><option>Perawatan</option><option>Rusak</option>
+          </select>
+          <select class="sel" id="asetLok" onchange="filterAset()">
+            <option value="">Semua Lokasi</option>
+            <option>Ruang Kelas</option><option>Lab Komputer</option><option>Lab IPA</option><option>Kantor Guru</option><option>Lapangan</option><option>Gudang</option>
+          </select>
+          <button class="btn" onclick="resetAsetFilter()">Reset</button>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="text-sm">Menampilkan <strong id="asetShown">10</strong> dari <strong id="asetTotal">247</strong> aset</div>
+        <div style="display:flex;gap:6px;">
+          <select class="sel" id="asetSort" onchange="filterAset()" style="font-size:12px;">
+            <option>Kode Aset (A–Z)</option><option>Nama (A–Z)</option><option>Nilai Tertinggi</option><option>Terbaru Ditambahkan</option>
+          </select>
+          <button class="btn btn-gold" onclick="openModal('modal-tambah-aset')">+ Tambah Aset</button>
+          <button class="btn" onclick="showToast('Mengekspor data aset...','success')">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 12h10M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:36px;"><input type="checkbox" class="chk" id="checkAll" onchange="toggleCheckAll(this)"></th>
+              <th style="width:44px;">No.</th>
+              <th class="sort-th" onclick="sortAset('nama')">Nama Aset ↕</th>
+              <th class="sort-th" onclick="sortAset('kat')">Kategori ↕</th>
+              <th>Lokasi</th>
+              <th class="sort-th" onclick="sortAset('kondisi')">Kondisi ↕</th>
+              <th class="sort-th" onclick="sortAset('nilai')">Nilai (Rp) ↕</th>
+              <th>Tgl Masuk</th>
+              <th>Aksi</th>
+            </tr></thead>
+            <tbody id="asetTableBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <div class="pg-info">Halaman <strong>1</strong> dari <strong id="asetPageCount">25</strong></div>
+          <div class="pg-btns" id="asetPagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-peminjaman">
+      <div class="borrow-status">
+        <div class="bs-tab active" onclick="filterBorrow('semua',this)">Semua (34)</div>
+        <div class="bs-tab" onclick="filterBorrow('aktif',this)">Aktif (26)</div>
+        <div class="bs-tab" onclick="filterBorrow('jatuh',this)">Jatuh Tempo (5)</div>
+        <div class="bs-tab" onclick="filterBorrow('selesai',this)">Selesai (3)</div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center;">
+        <div class="search-input" style="max-width:340px;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input type="text" placeholder="Cari peminjam atau aset..." oninput="filterBorrowSearch(this.value)">
+        </div>
+        <button class="btn btn-gold" style="margin-left:auto;" onclick="openModal('modal-tambah-pinjam')">+ Catat Peminjaman</button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>No.</th><th>Aset</th><th>Peminjam</th><th>Jabatan</th><th>Tgl Pinjam</th><th>Tgl Kembali</th><th>Status</th><th>Aksi</th>
+            </tr></thead>
+            <tbody id="borrowTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="page" id="page-laporan">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div class="report-card" onclick="showToast('Mengunduh laporan inventaris...','success')">
+          <div class="report-icon" style="background:var(--blue-bg);">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="12" height="14" rx="2" stroke="#1A4F8A" stroke-width="1.4"/><path d="M5 5h6M5 8h6M5 11h3" stroke="#1A4F8A" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="report-title">Laporan Inventaris</div><div class="report-desc">Daftar lengkap semua aset sekolah</div></div>
+        </div>
+        <div class="report-card" onclick="showToast('Mengunduh laporan peminjaman...','success')">
+          <div class="report-icon" style="background:var(--amber-bg);">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#8B5E00" stroke-width="1.4"/><path d="M8 5v3l2 2" stroke="#8B5E00" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="report-title">Laporan Peminjaman</div><div class="report-desc">Riwayat dan status peminjaman aset</div></div>
+        </div>
+        <div class="report-card" onclick="showToast('Mengunduh laporan perawatan...','success')">
+          <div class="report-icon" style="background:var(--green-bg);">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M12.5 3.5L10 6l-1-1 2.5-2.5a3 3 0 10-4.2 4.2L4 10a1 1 0 001.4 1.4l3.3-3.3A3 3 0 0012.5 3.5z" stroke="#1F6B45" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="report-title">Laporan Perawatan</div><div class="report-desc">Histori dan jadwal pemeliharaan</div></div>
+        </div>
+        <div class="report-card" onclick="showToast('Mengunduh laporan kondisi...','success')">
+          <div class="report-icon" style="background:var(--red-bg);">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 2L1 13h14L8 2z" stroke="#8B1A1A" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6v4" stroke="#8B1A1A" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="report-title">Laporan Kondisi Aset</div><div class="report-desc">Analisis kondisi dan depresiasi</div></div>
+        </div>
+        <div class="report-card" onclick="showToast('Mengunduh laporan keuangan...','success')">
+          <div class="report-icon" style="background:var(--gold-bg);">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M8 2v2M8 12v2M4 8H2M14 8h-2" stroke="#6B4800" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="8" r="3" stroke="#6B4800" stroke-width="1.4"/></svg>
+          </div>
+          <div><div class="report-title">Laporan Nilai Keuangan</div><div class="report-desc">Total nilai dan estimasi biaya</div></div>
+        </div>
+        <div class="report-card" onclick="showToast('Membuat laporan kustom...','success')">
+          <div class="report-icon" style="background:var(--purple-bg);">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M3 12V8M6 12V5M9 12V7M12 12V3" stroke="#4A3580" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="report-title">Laporan Kustom</div><div class="report-desc">Buat laporan sesuai kebutuhan</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Statistik Tahunan 2024</span>
+          <select class="sel" style="font-size:12px;"><option>2024</option><option>2023</option><option>2022</option></select>
+        </div>
+        <div style="padding:20px 18px;">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+            <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--text);">247</div><div style="font-size:12px;color:var(--text3);">Total Aset</div></div>
+            <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--blue);">156</div><div style="font-size:12px;color:var(--text3);">Peminjaman Tercatat</div></div>
+            <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--green);">43</div><div style="font-size:12px;color:var(--text3);">Perawatan Dilakukan</div></div>
+            <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--amber);">Rp 2.4M</div><div style="font-size:12px;color:var(--text3);">Nilai Total Aset</div></div>
+          </div>
+          <div style="height:160px;display:flex;align-items:flex-end;gap:8px;padding:0 8px;" id="laporanChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-kategori">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;">Kategori Aset</div>
+            <button class="btn btn-gold" style="font-size:12px;" onclick="openModal('modal-tambah-kategori')">+ Tambah</button>
+          </div>
+          <div id="kategoriList"></div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;">Lokasi / Ruangan</div>
+            <button class="btn btn-gold" style="font-size:12px;" onclick="openModal('modal-tambah-lokasi')">+ Tambah</button>
+          </div>
+          <div id="lokasiList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-pengaturan">
+      <div style="max-width:700px;">
+        <div class="settings-section">
+          <div class="settings-section-title">Informasi Sekolah</div>
+          <div class="card" style="padding:20px;">
+            <div class="form-grid">
+              <div class="form-group full"><label class="form-label">Nama Sekolah</label><input class="form-input" value="SDIT Aya Sophia Islamic School"></div>
+              <div class="form-group"><label class="form-label">NPSN</label><input class="form-input" value="12345678"></div>
+              <div class="form-group"><label class="form-label">Kota</label><input class="form-input" value="Depok, Jawa Barat"></div>
+              <div class="form-group full"><label class="form-label">Alamat</label><textarea class="form-input">Jl. Raya Aya Sophia No. 1, Depok</textarea></div>
+            </div>
+            <div style="margin-top:16px;"><button class="btn btn-primary" onclick="showToast('Perubahan disimpan','success')">Simpan Perubahan</button></div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Notifikasi</div>
+          <div class="settings-item"><div><div class="settings-item-label">Notifikasi Peminjaman Jatuh Tempo</div><div class="settings-item-desc">Kirim peringatan H-1 & H-3 sebelum jatuh tempo</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="settings-item"><div><div class="settings-item-label">Notifikasi Perawatan Terjadwal</div><div class="settings-item-desc">Ingatkan jadwal perawatan yang akan datang</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div class="settings-item"><div><div class="settings-item-label">Laporan Mingguan Otomatis</div><div class="settings-item-desc">Kirim ringkasan aset setiap Senin pagi</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Keamanan</div>
+          <div class="settings-item"><div><div class="settings-item-label">Autentikasi Dua Faktor</div><div class="settings-item-desc">Tambahkan lapisan keamanan ekstra</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+          <div class="settings-item"><div><div class="settings-item-label">Log Aktivitas</div><div class="settings-item-desc">Catat semua perubahan data dalam sistem</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          <div style="margin-top:10px;"><button class="btn btn-danger" onclick="showToast('Fitur ini memerlukan konfirmasi admin','warning')">Reset Kata Sandi</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-profil">
+      <div style="max-width:700px;">
+        <div class="profile-header">
+          <div class="profile-avatar-lg">A</div>
+          <div>
+            <div class="profile-name">Ahmad Fauzi, S.Pd.</div>
+            <div class="profile-role">Administrator Sistem · SDIT Aya Sophia Islamic School</div>
+            <div class="profile-badge">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M8 2L10 7h5l-4 3 1.5 5L8 12l-4.5 3L5 10 1 7h5z" fill="currentColor"/></svg>
+              Super Admin
+            </div>
+          </div>
+        </div>
+        <div class="card" style="padding:20px;margin-bottom:16px;">
+          <div style="font-size:14px;font-weight:600;margin-bottom:14px;">Informasi Pribadi</div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Nama Lengkap</label><input class="form-input" value="Ahmad Fauzi, S.Pd."></div>
+            <div class="form-group"><label class="form-label">NIP</label><input class="form-input" value="198504152010011002"></div>
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="ahmad.fauzi@ayasophia.sch.id"></div>
+            <div class="form-group"><label class="form-label">No. Telepon</label><input class="form-input" value="0812-3456-7890"></div>
+          </div>
+          <div style="margin-top:16px;"><button class="btn btn-primary" onclick="showToast('Profil berhasil diperbarui','success')">Simpan Perubahan</button></div>
+        </div>
+        <div class="card" style="padding:20px;">
+          <div style="font-size:14px;font-weight:600;margin-bottom:14px;">Statistik Aktivitas</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+            <div style="text-align:center;padding:12px;background:var(--bg3);border-radius:var(--radius-sm);"><div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;">247</div><div class="text-sm">Aset Dikelola</div></div>
+            <div style="text-align:center;padding:12px;background:var(--bg3);border-radius:var(--radius-sm);"><div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;">56</div><div class="text-sm">Transaksi Bulan Ini</div></div>
+            <div style="text-align:center;padding:12px;background:var(--bg3);border-radius:var(--radius-sm);"><div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;">2th</div><div class="text-sm">Bergabung</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div></div><div class="modal-overlay" id="modal-tambah-aset">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Tambah Aset Baru</div>
+      <button class="modal-close" onclick="closeModal('modal-tambah-aset')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Nama Aset *</label><input class="form-input" name="nama" placeholder="Contoh: Proyektor Epson EB-X51"></div>
+        <div class="form-group"><label class="form-label">Kode Aset</label><input class="form-input" name="kode" placeholder="AST-XXXX (otomatis)"></div>
+        <div class="form-group"><label class="form-label">Kategori *</label><select class="form-select" name="kategori_id"><option value="">Pilih Kategori</option></select></div>
+        <div class="form-group"><label class="form-label">Lokasi *</label><select class="form-select" name="lokasi_id"><option value="">Pilih Lokasi</option></select></div>
+        <div class="form-group"><label class="form-label">Kondisi Awal</label><select class="form-select" name="kondisi"><option value="Baik">Baik</option><option value="Perawatan">Perawatan</option><option value="Rusak">Rusak</option></select></div>
+        <div class="form-group"><label class="form-label">Nilai Perolehan (Rp)</label><input class="form-input" name="nilai" type="number" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Tanggal Masuk</label><input class="form-input" name="tgl_masuk" type="date"></div>
+        <div class="form-group"><label class="form-label">Sumber Dana</label><select class="form-select" name="sumber_dana"><option value="BOS">BOS</option><option value="Komite Sekolah">Komite Sekolah</option><option value="Hibah">Hibah</option><option value="Dana Mandiri">Dana Mandiri</option></select></div>
+        <div class="form-group full"><label class="form-label">Keterangan</label><textarea class="form-input" name="keterangan" placeholder="Deskripsi tambahan tentang aset..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-tambah-aset')">Batal</button>
+      <button class="btn btn-gold" onclick="tambahAset()">Simpan Aset</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-detail-aset">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="detailAsetNama">Detail Aset</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px;" id="detailAsetKode"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-detail-aset')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:16px;margin-bottom:16px;align-items:flex-start;">
+        <div id="detailContent" style="flex:1;"></div>
+        <div class="qr-mock">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="22" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="11" y="11" width="10" height="10" fill="currentColor" opacity=".4"/><rect x="33" y="5" width="22" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="39" y="11" width="10" height="10" fill="currentColor" opacity=".4"/><rect x="5" y="33" width="22" height="22" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="11" y="39" width="10" height="10" fill="currentColor" opacity=".4"/><rect x="33" y="33" width="6" height="6" fill="currentColor" opacity=".4"/><rect x="43" y="33" width="6" height="6" fill="currentColor" opacity=".4"/><rect x="33" y="43" width="6" height="6" fill="currentColor" opacity=".4"/><rect x="49" y="49" width="6" height="6" fill="currentColor" opacity=".4"/></svg>
+        </div>
+      </div>
+      <hr class="divider">
+      <div><div style="font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;">Riwayat Perubahan</div>
+      <div class="detail-history" id="detailHistory"></div></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" onclick="closeModal('modal-detail-aset');showToast('Aset dihapus','error')">Hapus</button>
+      <button class="btn" onclick="closeModal('modal-detail-aset')">Tutup</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-detail-aset');showToast('Mode edit dibuka','success')">Edit Aset</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-tambah-pinjam">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Catat Peminjaman Baru</div>
+      <button class="modal-close" onclick="closeModal('modal-tambah-pinjam')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Aset yang Dipinjam *</label><select class="form-select" name="aset_id"><option value="">Pilih Aset</option></select></div>
+        <div class="form-group"><label class="form-label">Nama Peminjam *</label><input class="form-input" name="nama_peminjam" placeholder="Nama guru/staf"></div>
+        <div class="form-group"><label class="form-label">NIP / ID Peminjam</label><input class="form-input" name="nip" placeholder="Nomor NIP"></div>
+        <div class="form-group"><label class="form-label">Jabatan</label><select class="form-select" name="jabatan"><option value="Guru">Guru</option><option value="Staf TU">Staf TU</option><option value="Kepala Sekolah">Kepala Sekolah</option><option value="Lainnya">Lainnya</option></select></div>
+        <div class="form-group"><label class="form-label">Keperluan</label><input class="form-input" name="keperluan" placeholder="Tujuan peminjaman"></div>
+        <div class="form-group"><label class="form-label">Tanggal Pinjam *</label><input class="form-input" name="tgl_pinjam" type="date"></div>
+        <div class="form-group"><label class="form-label">Tanggal Kembali *</label><input class="form-input" name="tgl_kembali" type="date"></div>
+        <div class="form-group full"><label class="form-label">Catatan</label><textarea class="form-input" name="catatan" placeholder="Catatan tambahan..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-tambah-pinjam')">Batal</button>
+      <button class="btn btn-gold" onclick="catatPeminjaman()">Catat Peminjaman</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal-overlay" id="modal-tambah-kategori">
+  <div class="modal" style="width:420px;">
+    <div class="modal-header"><div class="modal-title">Tambah Kategori</div><button class="modal-close" onclick="closeModal('modal-tambah-kategori')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Nama Kategori *</label><input class="form-input" placeholder="Contoh: Peralatan Audio Visual" id="newKatName"></div>
+      <div class="form-group"><label class="form-label">Deskripsi</label><textarea class="form-input" placeholder="Deskripsi singkat kategori..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-tambah-kategori')">Batal</button><button class="btn btn-gold" onclick="tambahKategori()">Simpan</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-tambah-lokasi">
+  <div class="modal" style="width:420px;">
+    <div class="modal-header"><div class="modal-title">Tambah Lokasi</div><button class="modal-close" onclick="closeModal('modal-tambah-lokasi')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Nama Lokasi / Ruangan *</label><input class="form-input" placeholder="Contoh: Ruang Kelas 4A" id="newLokName"></div>
+      <div class="form-group" style="margin-bottom:12px;"><label class="form-label">Gedung / Lantai</label><input class="form-input" placeholder="Contoh: Gedung A Lantai 2"></div>
+      <div class="form-group"><label class="form-label">Kapasitas Aset</label><input class="form-input" type="number" placeholder="Jumlah maksimum aset"></div>
+    </div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('modal-tambah-lokasi')">Batal</button><button class="btn btn-gold" onclick="tambahLokasi()">Simpan</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" id="toastIcon"><path d="M2 8l4 4 8-8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span id="toastMsg">Berhasil</span>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
